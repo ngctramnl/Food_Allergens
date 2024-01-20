@@ -1,0 +1,111 @@
+---
+title: "Food Allergens Prediction"
+output: html_document
+---
+
+## Install and load packages
+
+```{r message=FALSE, warning=FALSE}
+# install.packages(c('caTools', 'caret', 'vip','randomForest'))
+library(caTools)
+library(caret)
+library(dplyr)
+library(randomForest)
+library(vip)
+```
+
+## Import the dataset
+
+```{r}
+food <- read.csv("C:/Users/Admin/Documents/GitHub/Food_Allergens/food_ingredients_and_allergens.csv")
+```
+
+## Have a look at the dataframe
+
+```{r}
+head(food)
+colnames(food)
+str(food)
+```
+
+## Handle duplicate rows
+
+```{r}
+food <- distinct(food)
+```
+
+## Encode the target variable - Prediction
+
+```{r}
+food$Prediction = factor(food$Prediction,
+                         levels = c('Contains', 'Does not contain'),
+                         labels = c(0,1))
+```
+
+## Add factors for variables that are factors
+
+```{r}
+
+food$Allergens <- as.factor(food$Allergens)
+food$Food.Product <- as.factor(food$Food.Product)
+food$Main.Ingredient <- as.factor(food$Main.Ingredient)
+food$Fat.Oil <- as.factor(food$Fat.Oil)
+food$Seasoning <- as.factor(food$Seasoning)
+food$Sweetener <- as.factor(food$Sweetener)
+str(food)
+```
+
+## Handle missing values
+
+```{r}
+colSums(is.na(food))
+food <- na.omit(food)
+glimpse(food)
+summary(food)
+```
+There is one missing value in the Prediction column. Since this is the target variable, I dropped one row with missing value.
+
+Include only "Allergens", "Sweetener", "Fat.Oil", "Prediction" columns.
+
+```{r}
+food <- food %>%
+  select("Allergens", "Sweetener", "Fat.Oil", "Prediction")
+```
+
+## Prepare to run the random forest
+
+```{r}
+# Split the dataset
+set.seed(123)
+split <- sample.split(food$Prediction, SplitRatio = 0.8)
+training_set <- subset(food, split == TRUE)
+test_set <- subset(food, split == FALSE)
+```
+
+```{r}
+# Build the random forest
+classifier <- randomForest(Prediction ~ ., data=training_set, ntree=500, proximity=TRUE)
+classifier
+```
+
+```{r}
+# Predict on the test set
+pred <- predict(classifier, newdata = test_set[-4])
+pred
+```
+
+```{r}
+# Create the confusion matrix
+cm <- confusionMatrix(pred, test_set$Prediction)
+cm
+```
+
+The model correctly predicts 33 dishes that contain allergens, and correctly predicts 22 dishes that do not contain allergens. However, the model does not correctly predict 6 dishes that contain allergens. The Accuracy of the model is 90%.
+
+```{r}
+# Create a variable importance plot
+var_importance <- vip::vip(classifier, num_features = 10)
+print(var_importance)
+```
+
+Based on the above plot, we can infer the most important variable is Allergens which is the presence of ingredients might trigger allergies.
