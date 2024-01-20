@@ -19,5 +19,5 @@ Prediction : food products containing allergens and those that do not (contains 
 * Food manufacturers can use this analysis as an Allergen Detection Model (whether it contains allergens or not) and include the allergy advice on the packaging.
 * The most important variable is Allergens which is the presence of ingredients might trigger allergies.
 
-## References
+## Reference
 * Laksika Tharmalingam - Dataset
