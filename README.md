@@ -1,6 +1,6 @@
 # Food Allergens Prediction
 ## Business task
-* Build a model that predicts whether a dish contains allergens or not.
+* Build a model that predicts whether a dish contains allergens or not using Random Forest in R.
 
 ## Data sources
 * [Food Ingredients and Allergens Dataset](https://www.kaggle.com/datasets/uom190346a/food-ingredients-and-allergens) (CC0: Public Domain, dataset made available by [Laksika Tharmalingam](https://www.kaggle.com/uom190346a)).
