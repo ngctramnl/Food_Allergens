@@ -13,7 +13,7 @@ Allergens: Indicates the allergens associated with the food item, including the 
 Prediction: food products containing allergens and those that do not (contains, do not contain)
 
 ## Documentation of the analysis
-* Here is the analysis and the how behind my analysis: <https://ngctramnl.github.io/Food_Allergens/)>.
+* Here is the analysis and the how behind my analysis: <https://ngctramnl.github.io/Food_Allergens/>.
 
 ## Conclusions
 * Food manufacturers can use this analysis as an Allergen Detection Model (whether it contains allergens) and include the allergy advice on the packaging.
